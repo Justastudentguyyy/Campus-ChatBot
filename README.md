@@ -1,16 +1,34 @@
-# React + Vite
+# CampusGuide AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CampusGuide AI answers questions using a reference PDF and Gemini. The React
+client sends requests to an Express backend; the Gemini API key stays on the
+server.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Install dependencies with `npm install`.
+2. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` to your real API key.
+   Keep the key private and do not commit `.env`.
+3. Keep `GEMINI_MODEL=gemini-3.5-flash-lite`. For local PDF mode, leave
+   `PDF_SOURCE_URL` blank and put your approved PDF at
+   `documents/campus-handbook.pdf`. For online mode, set `PDF_SOURCE_URL` to a
+   direct, publicly accessible HTTPS PDF URL.
 
-## React Compiler
+## Run
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Start the backend and frontend in separate terminals:
 
-## Expanding the ESLint configuration
+```sh
+npm run server
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+npm run dev
+```
+
+The Vite development server proxies `/api` requests to Express on port 3001.
+Check backend status at `http://127.0.0.1:3001/api/health`.
+
+In the chat header, use **Instructions** to choose between the built-in system
+prompt and `src/knowledge-base.txt`. The selected text is sent as Gemini's
+system instruction; the configured PDF remains attached as reference material.
